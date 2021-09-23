@@ -3,14 +3,15 @@ import { useRef, useState } from 'react';
 import classes from './Checkout.module.css';
 
 const isEmpty = value => value.trim() === '';
-const isSixChars = value => value.trim() === 6;
+const isSixChars = value => value.trim().length === 6;
 
 const Checkout = (props) => {
     const [formInputsValidity, setFormInputValidity] = useState({
         name: true,
         street: true,
-        city: true,
-        postalCode: true
+        postalCode: true,
+        city: true
+        
     });
 
     const nameInputRef = useRef();
@@ -34,16 +35,21 @@ const Checkout = (props) => {
     setFormInputValidity({
         name: enteredNameIsValid,
         street: enteredStreetIsValid,
-        city: enteredCityIsValid,
-        postalCode: enteredPostalCodeIsValid
-    });
+        postalCode: enteredPostalCodeIsValid,
+        city: enteredCityIsValid
+        });
     const formIsValid = enteredNameIsValid && enteredStreetIsValid && enteredPostalCodeIsValid && enteredCityIsValid;
 
     if (!formIsValid) {
         return;
     }
 
-    // sumbit the cart data
+    props.onConfirm({
+        name: enteredName,
+        street: enteredStreet,
+        postalCode: enteredPostalCode,
+        city: enteredCity
+    });
   };
 
   const nameControlClasses = `${classes.control} ${formInputsValidity.name ? '' : classes.invalid}`;
